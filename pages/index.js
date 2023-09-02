@@ -5,7 +5,17 @@ import styles from '@/styles/Home.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export async function getStaticProps(){
+  const data = await fetch("https://baconipsum.com/api/?type=meat-and-filler", {
+    next: { revalidate: 60 },
+  }).then((x) => x.json());
+  return {
+    props: {data},
+    revalidate: 60
+  }
+}
+
+export default function Home({data}) {
   return (
     <>
       <Head>
@@ -20,6 +30,7 @@ export default function Home() {
             Get started by editing&nbsp;
             <code className={styles.code}>pages/index.js</code>
           </p>
+          <pre>{data}</pre>
           <div>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
